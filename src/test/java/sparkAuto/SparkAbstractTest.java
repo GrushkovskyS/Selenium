@@ -1,6 +1,7 @@
 package sparkAuto;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lesson6.MainSpark;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,20 +35,34 @@ public abstract class SparkAbstractTest {
 /*    void getPage(){
         Assertions.assertDoesNotThrow(()-> driver.navigate().to("https://spark.ru"),"Страница не доступна");
     }*/
+//    void authorizationTest() throws InterruptedException{
+//
+//        getDriver().get("https://spark.ru");
+//        Thread.sleep(10000);
+//        WebElement webElement1 = getDriver().findElement(By.xpath(".//a[@href=\"/auth\"]"));
+//        webElement1.click();
+//        Thread.sleep(6000);
+//        WebElement webElement2 = getDriver().findElement(By.xpath(".//input[@id=\"login_email\"]"));
+//        webElement2.sendKeys("sam144550@gmail.com");
+//        WebElement webElement3 = getDriver().findElement(By.xpath(".//input[@id=\"login_password\"]"));
+//        webElement3.sendKeys("m212121s");
+//        WebElement webElement4 = getDriver().findElement(By.xpath(".//input[@class=\"button\"]"));
+//        webElement4.click();
+//        Assertions.assertEquals("https://spark.ru/", getDriver().getCurrentUrl(),"Не та страница");
+//    }
     void authorizationTest() throws InterruptedException{
-
         getDriver().get("https://spark.ru");
-        Thread.sleep(10000);
-        WebElement webElement1 = getDriver().findElement(By.xpath(".//a[@href=\"/auth\"]"));
-        webElement1.click();
-        Thread.sleep(6000);
-        WebElement webElement2 = getDriver().findElement(By.xpath(".//input[@id=\"login_email\"]"));
-        webElement2.sendKeys("sam144550@gmail.com");
-        WebElement webElement3 = getDriver().findElement(By.xpath(".//input[@id=\"login_password\"]"));
-        webElement3.sendKeys("m212121s");
-        WebElement webElement4 = getDriver().findElement(By.xpath(".//input[@class=\"button\"]"));
-        webElement4.click();
+        Thread.sleep(3000);
+        MainSpark mainSpark =new MainSpark(getDriver());
+        mainSpark.auth.click();
+        Thread.sleep(3000);
+        mainSpark.login.sendKeys("sam144550@gmail.com");
+        Thread.sleep(3000);
+        mainSpark.password.sendKeys("m212121s");
+        Thread.sleep(3000);
+        mainSpark.loginButton.click();
         Assertions.assertEquals("https://spark.ru/", getDriver().getCurrentUrl(),"Не та страница");
+
     }
 
     @AfterAll
