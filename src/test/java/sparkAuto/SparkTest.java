@@ -1,5 +1,6 @@
 package sparkAuto;
 
+import io.qameta.allure.*;
 import lesson6.MainSpark;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
+@Story("Пользовательская история №1")
 public class SparkTest extends SparkAbstractTest {
 
 
@@ -15,6 +16,8 @@ public class SparkTest extends SparkAbstractTest {
     @Test
     @Order(1)
     @DisplayName("Добавление поста")
+    @Description("Этот тест добавляет новый пост")
+    @Severity(SeverityLevel.CRITICAL)
     void addPostTest() throws InterruptedException{
 //        WebElement webElement5 = getDriver().findElement(By.xpath(".//a[@id=\"headerWriteButton\"]"));
 //        webElement5.click();
