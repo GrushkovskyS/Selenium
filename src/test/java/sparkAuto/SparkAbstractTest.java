@@ -2,22 +2,27 @@ package sparkAuto;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lesson6.MainSpark;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.WebDriverEventListener;
+import spark.MyWebDriverEventListener;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class SparkAbstractTest {
 
-   private static WebDriver driver;
+  // private static WebDriver driver;
+    public static EventFiringWebDriver eventDriver; //Подключаем Allure
 
     @BeforeAll
      static void init(){
@@ -27,8 +32,11 @@ public abstract class SparkAbstractTest {
         options.addArguments("start-maximized");
         // options.addArguments("--headless"); сам браузер небудет запущен
 
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+//        driver = new ChromeDriver(options);
+//        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        eventDriver = new EventFiringWebDriver (new ChromeDriver(options));
+        eventDriver.register(new MyWebDriverEventListener());
+        eventDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
 
     @BeforeEach
@@ -67,10 +75,23 @@ public abstract class SparkAbstractTest {
 
     @AfterAll
     static void close(){
-       driver.quit();
+       eventDriver.quit();
+    }
+    @AfterEach
+    public void checkBrowser(){
+        List<LogEntry> allLogRows = getDriver().manage().logs().get(LogType.BROWSER).getAll();
+        if (allLogRows.isEmpty()){
+            if (allLogRows.size() > 0){
+                allLogRows.forEach(logEntry -> {
+                    System.out.println(logEntry.getMessage());
+                });
+            }
+        }
     }
 
+
+
     public static WebDriver getDriver(){
-        return driver;
+        return eventDriver;
     }
 }
